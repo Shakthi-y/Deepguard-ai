@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>DeepGuard AI — Agentic Image Authenticity Verification</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="scan-overlay" aria-hidden="true"></div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="gaugeGrad1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3ee8d6"/>
+      <stop offset="1" stop-color="#8b7bff"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<nav class="navbar">
+  <div class="nav-inner">
+    <div class="brand" data-nav="landing">
+      <span class="brand-mark">
+        <svg width="26" height="26" viewBox="0 0 26 26"><path d="M13 1 L24 6 V13 C24 19.5 19.2 23.8 13 25 C6.8 23.8 2 19.5 2 13 V6 Z" fill="none" stroke="url(#g1)" stroke-width="2"/><path d="M8 13 L11.5 16.5 L18 9" fill="none" stroke="url(#g1)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="g1" x1="0" y1="0" x2="26" y2="26"><stop offset="0" stop-color="#3ee8d6"/><stop offset="1" stop-color="#8b7bff"/></linearGradient></defs></svg>
+      </span>
+      <span class="brand-text">DeepGuard<span class="brand-ai">AI</span></span>
+    </div>
+    <div class="nav-links">
+      <button class="nav-link" data-nav="landing">Overview</button>
+      <button class="nav-link" data-nav="upload">Verify Image</button>
+      <button class="nav-link" data-nav="history">History</button>
+    </div>
+    <div class="nav-status" id="modelStatusPill">
+      <span class="dot"></span> <span id="modelStatusText">Checking model…</span>
+    </div>
+  </div>
+</nav>
+
+<main id="app">
+
+  <!-- ================= LANDING ================= -->
+  <section class="view" id="view-landing">
+    <div class="hero">
+      <div class="hero-grid" aria-hidden="true"></div>
+      <div class="hero-content">
+        <div class="eyebrow">AGENTIC AI · FORENSIC IMAGE VERIFICATION</div>
+        <h1>Seven agents.<br><span class="grad-text">One verdict.</span><br>Zero blind trust.</h1>
+        <p class="hero-sub">DeepGuard AI pipes every uploaded image through an orchestrated chain of specialist agents — detection, forensics, cross-verification, confidence scoring, and plain-language explanation — before it ever shows you a verdict.</p>
+        <div class="hero-actions">
+          <button class="btn btn-primary" data-nav="upload">Verify an Image <span aria-hidden="true">→</span></button>
+          <button class="btn btn-ghost" id="scrollPipelineBtn">See how it works</button>
+        </div>
+        <div class="hero-stats">
+          <div><span class="stat-num">7</span><span class="stat-label">Autonomous agents</span></div>
+          <div><span class="stat-num">224²</span><span class="stat-label">px model input</span></div>
+          <div><span class="stat-num">3</span><span class="stat-label">Verdict states</span></div>
+        </div>
+      </div>
+      <div class="hero-visual" aria-hidden="true">
+        <svg viewBox="0 0 360 360" class="hero-radar">
+          <circle cx="180" cy="180" r="160" class="radar-ring"/>
+          <circle cx="180" cy="180" r="115" class="radar-ring"/>
+          <circle cx="180" cy="180" r="70" class="radar-ring"/>
+          <line x1="180" y1="20" x2="180" y2="340" class="radar-cross"/>
+          <line x1="20" y1="180" x2="340" y2="180" class="radar-cross"/>
+          <g class="radar-sweep-group">
+            <path d="M180 180 L180 20 A160 160 0 0 1 293 67 Z" class="radar-sweep"/>
+          </g>
+          <circle cx="180" cy="180" r="40" fill="url(#coreGrad)"/>
+          <defs>
+            <radialGradient id="coreGrad"><stop offset="0" stop-color="#3ee8d6"/><stop offset="1" stop-color="#0a0e17" stop-opacity="0"/></radialGradient>
+          </defs>
+          <text x="180" y="186" text-anchor="middle" class="radar-label">SCAN</text>
+        </svg>
+      </div>
+    </div>
+
+    <div class="section" id="pipelineSection">
+      <div class="section-head">
+        <div class="eyebrow">THE AGENT CHAIN</div>
+        <h2>From upload to verdict, every step is accountable</h2>
+        <p class="section-sub">Each agent has one job, hands its output to the next, and nothing gets invented along the way.</p>
+      </div>
+      <div class="agent-flow" id="landingAgentFlow"></div>
+    </div>
+
+    <div class="section section-alt">
+      <div class="section-head">
+        <div class="eyebrow">RESPONSIBLE BY DESIGN</div>
+        <h2>Confidence, not certainty</h2>
+        <p class="section-sub">DeepGuard AI never claims 100% certainty. Every verdict is one of three honest states, backed by a visible model confidence score and a system confidence score reflecting agent agreement.</p>
+      </div>
+      <div class="verdict-cards">
+        <div class="verdict-card verdict-real">
+          <div class="verdict-icon">✓</div>
+          <h3>LIKELY REAL</h3>
+          <p>Model and forensic evidence align on authenticity.</p>
+        </div>
+        <div class="verdict-card verdict-fake">
+          <div class="verdict-icon">✕</div>
+          <h3>LIKELY FAKE</h3>
+          <p>Strong signals of manipulation or synthetic origin.</p>
+        </div>
+        <div class="verdict-card verdict-uncertain">
+          <div class="verdict-icon">?</div>
+          <h3>UNCERTAIN</h3>
+          <p>Evidence conflicts or confidence is too low to call.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="cta-band">
+      <h2>Ready to put an image to the test?</h2>
+      <button class="btn btn-primary btn-lg" data-nav="upload">Start Verification →</button>
+    </div>
+  </section>
+
+  <!-- ================= UPLOAD ================= -->
+  <section class="view hidden" id="view-upload">
+    <div class="page-head">
+      <div class="eyebrow">STEP 1 OF 2</div>
+      <h1>Upload an image to verify</h1>
+      <p class="section-sub">JPG, JPEG, PNG or WEBP · up to 10MB. Your image is analyzed locally by the pipeline below.</p>
+    </div>
+
+    <div class="dropzone" id="dropzone">
+      <input type="file" id="fileInput" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" hidden />
+      <div class="dropzone-inner" id="dropzoneInner">
+        <div class="dropzone-icon">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><path d="M24 32V12M24 12L16 20M24 12L32 20" stroke="url(#g2)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 34V36C8 38.2 9.8 40 12 40H36C38.2 40 40 38.2 40 36V34" stroke="url(#g2)" stroke-width="2.5" stroke-linecap="round"/><defs><linearGradient id="g2" x1="0" y1="0" x2="48" y2="48"><stop stop-color="#3ee8d6"/><stop offset="1" stop-color="#8b7bff"/></linearGradient></defs></svg>
+        </div>
+        <p class="dropzone-title">Drag &amp; drop an image, or <span class="link-text">browse files</span></p>
+        <p class="dropzone-sub">DeepGuard AI will run all 7 agents automatically</p>
+      </div>
+      <div class="preview-wrap hidden" id="previewWrap">
+        <img id="previewImg" alt="Uploaded preview" />
+        <button class="btn btn-ghost btn-sm" id="changeImageBtn">Change image</button>
+      </div>
+    </div>
+
+    <p class="error-msg hidden" id="uploadError"></p>
+
+    <div class="upload-actions">
+      <button class="btn btn-primary btn-lg" id="analyzeBtn" disabled>Run Agentic Analysis →</button>
+    </div>
+  </section>
+
+  <!-- ================= PIPELINE / LIVE INVESTIGATION ================= -->
+  <section class="view hidden" id="view-pipeline">
+    <div class="page-head">
+      <div class="eyebrow">STEP 2 OF 2 · LIVE INVESTIGATION</div>
+      <h1>Agents at work</h1>
+      <p class="section-sub">Watch each specialist agent hand off its findings to the next.</p>
+    </div>
+    <div class="pipeline-stage">
+      <div class="pipeline-image">
+        <img id="pipelinePreviewImg" alt="Analyzing" />
+        <div class="scan-line"></div>
+      </div>
+      <ol class="agent-live-list" id="agentLiveList"></ol>
+    </div>
+  </section>
+
+  <!-- ================= RESULTS ================= -->
+  <section class="view hidden" id="view-results">
+    <div class="results-top">
+      <div class="verdict-banner" id="verdictBanner">
+        <div class="verdict-banner-left">
+          <div class="verdict-label" id="verdictLabel">LIKELY REAL</div>
+          <div class="verdict-file" id="verdictFile"></div>
+        </div>
+        <div class="verdict-banner-actions">
+          <button class="btn btn-ghost btn-sm" id="newAnalysisBtn">New Analysis</button>
+          <button class="btn btn-primary btn-sm" id="downloadReportBtn">Download PDF Report</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="results-grid">
+      <div class="result-col-left">
+        <div class="glass-card image-viewer-card">
+          <div class="card-head"><h3>Analyzed Image</h3></div>
+          <div class="image-viewer" id="imageViewer">
+            <img id="resultImg" alt="Analyzed" />
+            <div class="viewer-controls">
+              <button id="zoomInBtn" title="Zoom in">+</button>
+              <button id="zoomOutBtn" title="Zoom out">−</button>
+              <button id="zoomResetBtn" title="Reset">⤾</button>
+              <button id="fullscreenBtn" title="Fullscreen">⛶</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card">
+          <div class="card-head"><h3>Confidence</h3></div>
+          <div class="confidence-gauges">
+            <div class="gauge-block">
+              <svg viewBox="0 0 140 140" class="gauge">
+                <circle cx="70" cy="70" r="58" class="gauge-track"/>
+                <circle cx="70" cy="70" r="58" class="gauge-fill" id="modelGaugeFill"/>
+                <text x="70" y="66" text-anchor="middle" class="gauge-num" id="modelGaugeNum">0%</text>
+                <text x="70" y="84" text-anchor="middle" class="gauge-sub">Model</text>
+              </svg>
+            </div>
+            <div class="gauge-block">
+              <svg viewBox="0 0 140 140" class="gauge">
+                <circle cx="70" cy="70" r="58" class="gauge-track"/>
+                <circle cx="70" cy="70" r="58" class="gauge-fill gauge-fill-alt" id="sysGaugeFill"/>
+                <text x="70" y="66" text-anchor="middle" class="gauge-num" id="sysGaugeNum">0%</text>
+                <text x="70" y="84" text-anchor="middle" class="gauge-sub">System</text>
+              </svg>
+            </div>
+          </div>
+          <div class="confidence-band" id="confidenceBand">—</div>
+        </div>
+      </div>
+
+      <div class="result-col-right">
+        <div class="glass-card">
+          <div class="card-head"><h3>Detection Agent</h3><span class="tag" id="modelSimTag"></span></div>
+          <div class="prob-bars">
+            <div class="prob-row">
+              <span>Real</span>
+              <div class="prob-track"><div class="prob-fill prob-real" id="realProbFill"></div></div>
+              <span id="realProbNum">0%</span>
+            </div>
+            <div class="prob-row">
+              <span>Fake</span>
+              <div class="prob-track"><div class="prob-fill prob-fake" id="fakeProbFill"></div></div>
+              <span id="fakeProbNum">0%</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card">
+          <div class="card-head"><h3>Forensic Findings</h3></div>
+          <div class="forensic-grid" id="forensicGrid"></div>
+          <div class="flags-list" id="flagsList"></div>
+        </div>
+
+        <div class="glass-card">
+          <div class="card-head"><h3>Verification</h3></div>
+          <p class="reasoning-text" id="reasoningText"></p>
+        </div>
+
+        <div class="glass-card">
+          <div class="card-head"><h3>AI Explanation</h3></div>
+          <p class="explanation-text" id="explanationText"></p>
+        </div>
+
+        <div class="glass-card disclaimer-card">
+          <p id="disclaimerText"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= HISTORY ================= -->
+  <section class="view hidden" id="view-history">
+    <div class="page-head">
+      <div class="eyebrow">SAVED LOCALLY</div>
+      <h1>Analysis History</h1>
+      <p class="section-sub">Stored in your browser's local storage on this device.</p>
+    </div>
+    <div class="history-list" id="historyList"></div>
+    <p class="empty-state hidden" id="historyEmpty">No analyses yet — verify your first image to see it here.</p>
+  </section>
+
+</main>
+
+<!-- ================= ASK DEEPGUARD CHAT ================= -->
+<div class="chat-launcher" id="chatLauncher">
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 4h16v12H8l-4 4V4Z" stroke="white" stroke-width="1.8" stroke-linejoin="round"/></svg>
+</div>
+<div class="chat-panel hidden" id="chatPanel">
+  <div class="chat-header">
+    <span>Ask DeepGuard</span>
+    <button id="closeChatBtn">✕</button>
+  </div>
+  <div class="chat-messages" id="chatMessages">
+    <div class="chat-msg chat-msg-bot">Hi, I'm DeepGuard's assistant. Run an analysis, then ask me anything about the result — or ask how the agent pipeline works.</div>
+  </div>
+  <form class="chat-input-row" id="chatForm">
+    <input type="text" id="chatInput" placeholder="Ask about this result…" autocomplete="off" />
+    <button type="submit">→</button>
+  </form>
+</div>
+
+<footer class="footer">
+  <span>DeepGuard AI · Agentic image authenticity verification for AI &amp; Data Science coursework</span>
+  <span class="footer-disclaimer">AI-based assessment — not absolute proof.</span>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
